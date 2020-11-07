@@ -8,7 +8,7 @@ import { showError } from '../common'
 import AuthInput from '../components/AuthInput'
 
 import axios from 'axios'
-
+import { androidClientId } from '../../env'
 
 import * as Google from 'expo-google-app-auth'; //https://docs.expo.io/versions/latest/sdk/google/
 
@@ -51,12 +51,12 @@ export default class Auth extends Component {
 
 	signin = async () => {
 		try {
-			// const res = await axios.post(`${server}/signin`, {
-			// 	email: this.state.email,
-			// 	password: this.state.password
-			// })
+			const res = await axios.post(`${server}/signin`, {
+				email: this.state.email,
+				password: this.state.password
+			})
 
-			// axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
+			 axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
 			if(this.state.email && this.state.password)
 				this.props.navigation.navigate('Home')
 			showError('Precia de login e senha')
@@ -68,7 +68,7 @@ export default class Auth extends Component {
 	signInWithGoogleAsync = async () => {
 		try {
 			const result = await Google.logInAsync({
-				androidClientId: '', 
+				androidClientId: androidClientId, 
 				//iosClientId: YOUR_CLIENT_ID_HERE,
 				scopes: ['profile', 'email'],
 			});

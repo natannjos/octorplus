@@ -1,0 +1,6 @@
+// Renomear para env.js
+
+module.exports = {
+    androidClientId: '',
+    iosClientId: '',
+}

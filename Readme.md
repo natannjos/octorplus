@@ -1,0 +1,1 @@
+Adiconar arquivo env.js e importar os clientIds

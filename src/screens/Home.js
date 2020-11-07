@@ -11,25 +11,31 @@ export default class Home extends Component {
 		return (
 					<View style={styles.container}>
 	
-						<Text>
+						<Text style={styles.title}>
 							Home
 						</Text>
-						<Text>
-							Nome: {navigationParams.user.name}
-						</Text>
-						<Text>
-							Email: {navigationParams.user.email}
-						</Text>
-						<Text>
-							Nome de Familia: {navigationParams.user.familyName}
-						</Text>
-						<Text>
-							Nome dado: {navigationParams.user.givenName}
-						</Text>
-						<Text>
-							ID: {navigationParams.user.id}
-						</Text>
-						<Image style={styles.logo} source={{ uri: `${navigationParams.user.photoUrl}`}}/>
+						{
+						navigationParams.user ? 
+						
+						<View style={styles.content}>
+							<Text>
+								Nome: {navigationParams.user.name}
+							</Text>
+							<Text>
+								Email: {navigationParams.user.email}
+							</Text>
+							<Text>
+								Nome de Familia: {navigationParams.user.familyName}
+							</Text>
+							<Text>
+								Nome dado: {navigationParams.user.givenName}
+							</Text>
+							<Text>
+								ID: {navigationParams.user.id}
+							</Text>
+							<Image style={styles.logo} source={{ uri: `${navigationParams.user.photoUrl}`}}/>
+						</View>
+						: null}
 	
 					</View>
 			)
@@ -45,5 +51,12 @@ const styles = StyleSheet.create({
 	logo: {
     width: 66,
     height: 58,
-  },
+	},
+	title: {
+		fontSize: 60
+	},
+	content: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	}
 })
