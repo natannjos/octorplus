@@ -8,9 +8,12 @@ import { showError } from '../common'
 import AuthInput from '../components/AuthInput'
 
 import axios from 'axios'
-import { androidClientId } from '../../env'
+import { androidGoogleClientId, androidFBClientId } from '../../env'
 
 import * as Google from 'expo-google-app-auth'; //https://docs.expo.io/versions/latest/sdk/google/
+import * as Facebook from 'expo-facebook'; // https://docs.expo.io/versions/latest/sdk/facebook/
+import { exp } from 'react-native/Libraries/Animated/src/Easing'
+
 
 const initialState = {
 	username: '',
@@ -65,10 +68,10 @@ export default class Auth extends Component {
 		}
 	}
 
-	signInWithGoogleAsync = async () => {
+	googleLogin = async () => {
 		try {
 			const result = await Google.logInAsync({
-				androidClientId: androidClientId, 
+				androidClientId: androidGoogleClientId, 
 				//iosClientId: YOUR_CLIENT_ID_HERE,
 				scopes: ['profile', 'email'],
 			});
@@ -88,6 +91,31 @@ export default class Auth extends Component {
 		}
 	}
 
+	facebookLogin = async () => {
+		try {
+			await Facebook.initializeAsync({
+				appId: androidFBClientId,
+			});
+			const {
+				type,
+				token	
+			} = await Facebook.logInWithReadPermissionsAsync({
+				permissions: ["public_profile"]
+			});
+			
+			if (type === 'success') {
+				// Get the user's name using Facebook's Graph API
+				const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+				Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+			} else {
+				// type === 'cancel'
+				
+			}
+  } catch (err) {
+		alert(`Facebook Login Error: ${err}`);
+		
+  }
+	}
 
 	render() {
 		return (
@@ -172,7 +200,9 @@ export default class Auth extends Component {
 							</Text>
 						</TouchableOpacity>
 
-						<Button onPress={this.signInWithGoogleAsync} title='Acesse Google' />
+						<Button onPress={this.googleLogin} title='Acesse Google' />
+
+						<Button onPress={this.facebookLogin} title='Acesse Facebook' />
 
 					</View>
 							

@@ -17,16 +17,27 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.octor.octorplus",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.octor.octorplus",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "facebook-client-id": "1287258108280320"
+    },
+    "facebookScheme": "fb1287258108280320",
+    "facebookAppId": "1287258108280320",
+    "facebookDisplayName": "OctorPlus",
+    "scheme": "com.octor.octorplus"
   }
 }
