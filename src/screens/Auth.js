@@ -8,11 +8,13 @@ import { showError } from '../common'
 import AuthInput from '../components/AuthInput'
 
 import axios from 'axios'
-import { androidGoogleClientId, androidFBClientId } from '../../env'
+import { androidGoogleClientId, androidFBClientId, googleWebAppId } from '../../env'
 
 import * as Google from 'expo-google-app-auth'; //https://docs.expo.io/versions/latest/sdk/google/
 import * as Facebook from 'expo-facebook'; // https://docs.expo.io/versions/latest/sdk/facebook/
-import { exp } from 'react-native/Libraries/Animated/src/Easing'
+
+//import * as AuthSession from 'expo-auth-session';
+
 
 
 const initialState = {
@@ -70,12 +72,21 @@ export default class Auth extends Component {
 
 	googleLogin = async () => {
 		try {
+			// let res = await AuthSession.startAsync({
+			// 	authUrl:
+			// 		`https://accounts.google.com/o/oauth2/v2/auth?` +
+			// 		`&client_id=${googleWebAppId}` +
+			// 		`&redirect_uri=${encodeURIComponent(redirectUrl)}` +
+			// 		`&response_type=code` +
+			// 		`&access_type=offline` +
+			// 		`&scope=profile`,
+			// });
 			const result = await Google.logInAsync({
 				androidClientId: androidGoogleClientId, 
 				//iosClientId: YOUR_CLIENT_ID_HERE,
 				scopes: ['profile', 'email'],
 			});
-		
+
 		if (result.type === 'success') {
 			axios.defaults.headers.common['Authorization'] = `bearer ${result.accessToken}`
 			this.props.navigation.navigate({
@@ -83,11 +94,11 @@ export default class Auth extends Component {
 				params: {
 					user: result.user
 				}})
-    } else {
-      showError('Sua requisição foi cancelada!')
-    }
+		} else {
+			showError('Sua requisição foi cancelada!')
+		}
 		} catch (e) {
-			showError('Ocorreu um erro em sua requisição')
+			showError('Ocorreu um erro em sua requisição' + e)
 		}
 	}
 
@@ -111,10 +122,10 @@ export default class Auth extends Component {
 				// type === 'cancel'
 				
 			}
-  } catch (err) {
-		alert(`Facebook Login Error: ${err}`);
-		
-  }
+		} catch (err) {
+			alert(`Facebook Login Error: ${err}`);
+			
+		}
 	}
 
 	render() {
@@ -205,9 +216,6 @@ export default class Auth extends Component {
 						<Button onPress={this.facebookLogin} title='Acesse Facebook' />
 
 					</View>
-							
-					 
-
 			</SafeAreaView>
 		)
 	}
