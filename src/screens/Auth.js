@@ -10,14 +10,15 @@ import AuthInput from '../components/AuthInput'
 import axios from 'axios'
 import { androidGoogleClientId, androidFBClientId, googleWebAppId } from '../../env'
 
-import * as Google from 'expo-google-app-auth'; //https://docs.expo.io/versions/latest/sdk/google/
 import * as Facebook from 'expo-facebook'; // https://docs.expo.io/versions/latest/sdk/facebook/
+import * as GoogleSignIn from 'expo-google-sign-in';
 
 //import * as AuthSession from 'expo-auth-session';
 
 
 
 const initialState = {
+	user: null,
 	username: '',
 	email: '',
 	password: '',
@@ -30,6 +31,40 @@ export default class Auth extends Component {
 	state = {
 		...initialState
 	}
+	componentDidMount() {
+    this.initAsync();
+  }
+
+	initAsync = async () => {
+    await GoogleSignIn.initAsync({
+      // You may ommit the clientId when the firebase `googleServicesFile` is configured
+      clientId: androidGoogleClientId,
+    });
+    this._syncUserWithStateAsync();
+  };
+
+	_syncUserWithStateAsync = async () => {
+    const user = await GoogleSignIn.signInSilentlyAsync();
+    this.setState({ user });
+  };
+
+	signOutAsync = async () => {
+    await GoogleSignIn.signOutAsync();
+    this.setState({ user: null });
+  };
+
+  signInAsync = async () => {
+    try {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === 'success') {
+				this._syncUserWithStateAsync();
+				alert("Seu email é:" + user.email)
+      }
+    } catch ({ message }) {
+      alert('login: Error:' + message);
+    }
+  };
 
 	signinOrSignup = () => {
 		if(this.state.stageNew)
@@ -70,37 +105,7 @@ export default class Auth extends Component {
 		}
 	}
 
-	googleLogin = async () => {
-		try {
-			// let res = await AuthSession.startAsync({
-			// 	authUrl:
-			// 		`https://accounts.google.com/o/oauth2/v2/auth?` +
-			// 		`&client_id=${googleWebAppId}` +
-			// 		`&redirect_uri=${encodeURIComponent(redirectUrl)}` +
-			// 		`&response_type=code` +
-			// 		`&access_type=offline` +
-			// 		`&scope=profile`,
-			// });
-			const result = await Google.logInAsync({
-				androidClientId: androidGoogleClientId, 
-				//iosClientId: YOUR_CLIENT_ID_HERE,
-				scopes: ['profile', 'email'],
-			});
 
-		if (result.type === 'success') {
-			axios.defaults.headers.common['Authorization'] = `bearer ${result.accessToken}`
-			this.props.navigation.navigate({
-				routeName:'Home', 
-				params: {
-					user: result.user
-				}})
-		} else {
-			showError('Sua requisição foi cancelada!')
-		}
-		} catch (e) {
-			showError('Ocorreu um erro em sua requisição' + e)
-		}
-	}
 
 	facebookLogin = async () => {
 		try {
@@ -211,7 +216,7 @@ export default class Auth extends Component {
 							</Text>
 						</TouchableOpacity>
 
-						<Button onPress={this.googleLogin} title='Acesse Google' />
+						<Button onPress={this.signInAsync} title='Acesse Google' />
 
 						<Button onPress={this.facebookLogin} title='Acesse Facebook' />
 

@@ -19,7 +19,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.octor.octorplus",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId":"744362133948-hglrbpnlad0h0uq9c66p30s3oa4hbccc.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -38,6 +43,6 @@
     "facebookScheme": "fb1287258108280320",
     "facebookAppId": "1287258108280320",
     "facebookDisplayName": "OctorPlus",
-    "scheme": "com.octor.octorplus"
+    "scheme": "com.octor.octorplus"    
   }
 }
