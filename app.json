@@ -27,6 +27,11 @@
       }
     },
     "android": {
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "67:20:8E:22:85:48:1D:DE:29:4E:8C:5C:75:44:6C:14:30:F6:D7:DC"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

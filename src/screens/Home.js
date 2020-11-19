@@ -10,7 +10,7 @@ export default class Home extends Component {
 
 		return (
 					<View style={styles.container}>
-	
+
 						<Text style={styles.title}>
 							Home
 						</Text>
@@ -36,7 +36,7 @@ export default class Home extends Component {
 							<Image style={styles.logo} source={{ uri: `${navigationParams.user.photoUrl}`}}/>
 						</View>
 						: null}
-	
+
 					</View>
 			)
 	}
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	logo: {
-    width: 66,
-    height: 58,
+		width: 66,
+		height: 58,
 	},
 	title: {
 		fontSize: 60

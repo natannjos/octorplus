@@ -8,7 +8,7 @@ import { showError } from '../common'
 import AuthInput from '../components/AuthInput'
 
 import axios from 'axios'
-import { androidGoogleClientId, androidFBClientId, googleWebAppId } from '../../env'
+import { androidGoogleClientId, androidFBClientId, googleWebAppId } from '../../cliendIds'
 
 import * as Facebook from 'expo-facebook'; // https://docs.expo.io/versions/latest/sdk/facebook/
 import * as GoogleSignIn from 'expo-google-sign-in';
@@ -32,39 +32,40 @@ export default class Auth extends Component {
 		...initialState
 	}
 	componentDidMount() {
-    this.initAsync();
-  }
+		this.initAsync();
+	}
 
 	initAsync = async () => {
-    await GoogleSignIn.initAsync({
-      // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      clientId: androidGoogleClientId,
-    });
-    this._syncUserWithStateAsync();
-  };
+		await GoogleSignIn.initAsync({
+			// You may ommit the clientId when the firebase `googleServicesFile` is configured
+			clientId: androidGoogleClientId,
+		});
+		this._syncUserWithStateAsync();
+	};
 
 	_syncUserWithStateAsync = async () => {
-    const user = await GoogleSignIn.signInSilentlyAsync();
-    this.setState({ user });
-  };
+		const user = await GoogleSignIn.signInSilentlyAsync();
+		this.setState({ user });
+	};
 
 	signOutAsync = async () => {
-    await GoogleSignIn.signOutAsync();
-    this.setState({ user: null });
-  };
+		await GoogleSignIn.signOutAsync();
+		this.setState({ user: null });
+	};
 
-  signInAsync = async () => {
-    try {
-      await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user } = await GoogleSignIn.signInAsync();
-      if (type === 'success') {
+	signInAsync = async () => {
+		try {
+			await GoogleSignIn.askForPlayServicesAsync();
+			const { type, user } = await GoogleSignIn.signInAsync();
+			alert(type)
+			if (type === 'success') {
 				this._syncUserWithStateAsync();
 				alert("Seu email é:" + user.email)
-      }
-    } catch ({ message }) {
-      alert('login: Error:' + message);
-    }
-  };
+			}
+		} catch ({ message }) {
+			//alert('login: Error:' + message);
+		}
+	};
 
 	signinOrSignup = () => {
 		if(this.state.stageNew)
@@ -84,7 +85,7 @@ export default class Auth extends Component {
 
 			showSuccess('usuário cadastrado!')
 			this.setState({ stageNew: false })
-		} catch (error) {
+		}	catch (error) {
 			showError(error)
 		}
 	}
@@ -96,7 +97,7 @@ export default class Auth extends Component {
 				password: this.state.password
 			})
 
-			 axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
+			axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
 			if(this.state.email && this.state.password)
 				this.props.navigation.navigate('Home')
 			showError('Precia de login e senha')
@@ -104,8 +105,6 @@ export default class Auth extends Component {
 			showError(error)
 		}
 	}
-
-
 
 	facebookLogin = async () => {
 		try {
